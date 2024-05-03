@@ -1,0 +1,4 @@
+imgaug
+numpy
+cv2
+tqdm
