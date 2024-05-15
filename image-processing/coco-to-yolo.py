@@ -1,9 +1,11 @@
 import json
 import os
 
-path = os.getenv("COCO_PATH") or input("Enter the path to your coco dataset: ")
+path = os.getenv("COCO_PATH") or input("Enter the path where your coco dataset is located: ")
+file_name = os.getenv("COCO_NAME") or input("Enter the name of the coco dataset: ")
+
 # Load COCO JSON file
-with open(path) as f:
+with open(rf"{path}\{file_name}") as f:
     data = json.load(f)
 
 # Get annotations and images
@@ -11,7 +13,7 @@ annotations = data['annotations']
 images = {image['id']: image for image in data['images']}
 
 # Create directory for YOLO labels if not exists
-os.makedirs('labels', exist_ok=True)
+os.makedirs('../labels', exist_ok=True)
 
 for annotation in annotations:
     image_id = annotation['image_id']
@@ -29,7 +31,7 @@ for annotation in annotations:
     height /= img_details['height']
 
     # Write to file
-    label_file = os.path.join('labels', fr"{path}\{img_details['file_name'].replace('.jpg', '.txt')}")
+    label_file = os.path.join('../labels', fr"{path}\{img_details['file_name'].replace('.jpg', '.txt')}")
 
     with open(label_file, 'a') as file:
         file.write(f"{category_id} {x_center} {y_center} {width} {height}\n")
